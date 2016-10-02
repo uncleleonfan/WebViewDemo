@@ -8,13 +8,18 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private WebView mWebView;
 
     private ProgressBar mProgress;
+
+    private Button mPre;
+
+    private Button mNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +27,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mWebView = (WebView) findViewById(R.id.web_view);
         mProgress = (ProgressBar) findViewById(R.id.progress);
+        mPre = (Button) findViewById(R.id.pre);
+        mNext = (Button) findViewById(R.id.next);
 
-//        mWebView.loadUrl("http://www.itcast.cn");
-        mWebView.loadUrl("http://www.zhinengshe.com/");
+        mPre.setOnClickListener(this);
+        mNext.setOnClickListener(this);
+
+        mWebView.loadUrl("http://www.itcast.cn");
+//        mWebView.loadUrl("http://www.zhinengshe.com/");
         mWebView.setWebViewClient(mWebViewClient);
         mWebView.setWebChromeClient(mWebChromeClient);
 
@@ -60,4 +70,26 @@ public class MainActivity extends AppCompatActivity {
             mProgress.setProgress(newProgress);
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.pre:
+                onPre();
+                break;
+            case R.id.next:
+                onNext();
+                break;
+        }
+    }
+
+    private void onNext() {
+        mWebView.goForward();
+    }
+
+    private void onPre() {
+        mWebView.goBack();
+    }
+
+
 }
