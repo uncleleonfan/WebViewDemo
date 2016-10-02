@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,21 +23,27 @@ public class MainActivity extends AppCompatActivity {
         mWebView = (WebView) findViewById(R.id.web_view);
         mProgress = (ProgressBar) findViewById(R.id.progress);
 
-        mWebView.loadUrl("https://www.baidu.com");
+//        mWebView.loadUrl("http://www.itcast.cn");
+        mWebView.loadUrl("http://www.zhinengshe.com/");
         mWebView.setWebViewClient(mWebViewClient);
         mWebView.setWebChromeClient(mWebChromeClient);
+
+        WebSettings webSettings = mWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setUseWideViewPort(true);
     }
     
     private WebViewClient mWebViewClient = new WebViewClient() {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            Toast.makeText(MainActivity.this, "onPageStarted", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, "onPageStarted", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            Toast.makeText(MainActivity.this, "onPageFinished", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, "onPageFinished", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -45,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onReceivedTitle(WebView view, String title) {
-            Toast.makeText(MainActivity.this, "onReceivedTitle " + title, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, "onReceivedTitle " + title, Toast.LENGTH_SHORT).show();
         }
 
         @Override
