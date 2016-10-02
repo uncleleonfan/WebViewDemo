@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -20,6 +21,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mPre;
 
     private Button mNext;
+
+    private static final int QUIT_TIME_INTERNAL = 2000;
+    private float mQuitStartTime = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         webSettings.setBuiltInZoomControls(true);
         webSettings.setUseWideViewPort(true);
     }
-    
+
     private WebViewClient mWebViewClient = new WebViewClient() {
 
         @Override
@@ -84,12 +89,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void onNext() {
-        mWebView.goForward();
+        if (mWebView.canGoForward()) {
+            mWebView.goForward();
+        } else {
+            Toast.makeText(MainActivity.this, "已经是最后一页", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void onPre() {
-        mWebView.goBack();
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+        } else {
+            Toast.makeText(MainActivity.this, "已经是第一页", Toast.LENGTH_SHORT).show();
+        }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+        } else {
+            if (System.currentTimeMillis() - mQuitStartTime < QUIT_TIME_INTERNAL) {
+                finish();
+            } else {
+                Toast.makeText(MainActivity.this, "再点击一次退出应用", Toast.LENGTH_SHORT).show();
+                mQuitStartTime = System.currentTimeMillis();
+            }
+        }
+    }
 }
