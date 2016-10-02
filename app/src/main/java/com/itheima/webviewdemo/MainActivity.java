@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -30,23 +31,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mWebView = (WebView) findViewById(R.id.web_view);
-        mProgress = (ProgressBar) findViewById(R.id.progress);
-        mPre = (Button) findViewById(R.id.pre);
-        mNext = (Button) findViewById(R.id.next);
-
-        mPre.setOnClickListener(this);
-        mNext.setOnClickListener(this);
-
-        mWebView.loadUrl("http://www.itcast.cn");
+        initView();
+        initEvent();
+        setClient();
+        initWebSettings();
+        //mWebView.loadUrl("http://www.itcast.cn");
 //        mWebView.loadUrl("http://www.zhinengshe.com/");
-        mWebView.setWebViewClient(mWebViewClient);
-        mWebView.setWebChromeClient(mWebChromeClient);
+        mWebView.loadUrl("file:///android_asset/demo.html");
 
+        mWebView.addJavascriptInterface(new JSCallAndroid() {
+
+            @JavascriptInterface//注意:此处一定要加该注解,否则在4.1+系统上运行失败
+            @Override
+            public void onCallback() {
+                Toast.makeText(MainActivity.this, "Js called Android!", Toast.LENGTH_SHORT).show();
+            }
+        }, "demo");
+    }
+
+    private void initWebSettings() {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(true);
         webSettings.setUseWideViewPort(true);
+    }
+
+    private void setClient() {
+        mWebView.setWebViewClient(mWebViewClient);
+        mWebView.setWebChromeClient(mWebChromeClient);
+    }
+    
+    private void initEvent() {
+        mPre.setOnClickListener(this);
+        mNext.setOnClickListener(this);
+    }
+
+    private void initView() {
+        mWebView = (WebView) findViewById(R.id.web_view);
+        mProgress = (ProgressBar) findViewById(R.id.progress);
+        mPre = (Button) findViewById(R.id.pre);
+        mNext = (Button) findViewById(R.id.next);
     }
 
     private WebViewClient mWebViewClient = new WebViewClient() {
@@ -116,5 +140,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mQuitStartTime = System.currentTimeMillis();
             }
         }
+    }
+
+    public interface JSCallAndroid {
+        @JavascriptInterface
+        public void onCallback();
     }
 }
