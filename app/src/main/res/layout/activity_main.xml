@@ -43,6 +43,14 @@
             android:gravity="center"
             android:onClick="onNext"/>
 
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="AndroidCallJS"
+            android:onClick="onAndroidCallJS"/>
+
+
     </LinearLayout>
 
 </RelativeLayout>

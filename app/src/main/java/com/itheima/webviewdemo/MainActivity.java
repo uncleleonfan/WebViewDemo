@@ -142,8 +142,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void onAndroidCallJS(View view) {
+        mWebView.loadUrl("javascript:wave()");
+    }
+
     public interface JSCallAndroid {
         @JavascriptInterface
         public void onCallback();
     }
+
 }
